@@ -1,0 +1,556 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Practico_Matrices
+{
+    class MATRICES
+    {
+        const int MAXF = 50;
+        const int MAXC = 50;
+        private int[,] x;
+        private int f, c;
+
+        // CONSTRUCTOR--------------------------
+        public MATRICES()
+        {
+            f = 0; c = 0;
+            x = new int[MAXF, MAXC];
+        }
+
+        // CARGAR--------------------------------------------
+        public void Cargar(int nf, int nc, int a, int b)
+        {
+            Random r = new Random();
+            f = nf; c = nc;
+            for (int f1 = 1; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    x[f1, c1] = r.Next(a, b + 1);
+                }
+            }
+        }
+
+        // DESCARGAR--------------------------------
+        public string Descargar()
+        {
+            string s = "";
+            for (int f1 = 1; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    s = s + x[f1, c1] + "\x09";
+                }
+                s = s + "\x0d" + "\x0a";
+            }
+            return s;
+        }
+
+        // AUX-------------------------------------
+
+        // Fila y Columna
+        public int Fila()
+        {
+            return f;
+        }
+        public int Columna()
+        {
+            return c;
+        }
+        // Frec de elemento------------------------
+        public int Frec(int ele)
+        {
+            int frec = 0;
+            for (int f1 = 1; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    if (ele == x[f1, c1])
+                    {
+                        frec++;
+                    }
+                }
+            }
+            return frec;
+        }
+        // Se encuentra?------------------
+        public bool SeEncuentra(int ele)
+        {
+            int f1;
+            f1 = 1;
+            bool bandera = false;
+            while ((f1 <= f) && (bandera == false))
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    if (ele == x[f1, c1])
+                    {
+                        bandera = true;
+                        break;
+                    }
+                }
+                f1++;
+            }
+            return bandera;
+        }
+        // Intercambio de filas
+        public void InterFils(int nf1, int nf2)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                Intercambio(nf1, c1, nf2, c1);
+            }
+        }
+        // Cantidad de primos en fila
+        public int CantPri(int nf)
+        {
+            int primos = 0;
+            NEnt naux = new NEnt();
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                naux.Cargar(x[nf, c1]);
+                if (naux.VerifPri())
+                {
+                    primos++;
+                }
+            }
+            return primos;
+        }
+        // Elemento de mayor frecuencia
+        public int PosEleMayFrecCol()
+        {
+            int ele, mayfrec, posc;
+            mayfrec = 0; posc = 0;
+            for (int f1 = 1; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    ele = x[f1, c1];
+                    if (Frec(ele) > mayfrec)
+                    {
+                        mayfrec = Frec(ele);
+
+                    }
+                    posc++;
+                }
+            }
+            return posc;
+        }
+        public int PosEleMayFrecFil()
+        {
+            int ele, mayfrec, posf;
+            mayfrec = 0; posf = 0;
+            for (int f1 = 1; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    ele = x[f1, c1];
+                    if (Frec(ele) > mayfrec)
+                    {
+                        mayfrec = Frec(ele);
+
+                    }
+                }
+                posf++;
+            }
+            return posf;
+        }
+        // INTERCAMBIO----------------------------------------------------
+        public void Intercambio(int fp1, int cp1, int fp2, int cp2)
+        {
+            int aux;
+            aux = x[fp1, cp1];
+            x[fp1, cp1] = x[fp2, cp2];
+            x[fp2, cp2] = aux;
+        }        
+
+        //-------------------------------PRACTICO-------------------------------
+        //----------------------------------------------------------------------
+
+        // Ejercicio 1: Acumulación de elementos primos-----------
+        public string AcumPrim()
+        {
+            string r = "F = ";
+            bool bandera = true;
+            NEnt naux = new NEnt();
+            for (int f1 = f; f1 >= 1; f1--)
+            {
+                for (int c1 = c; c1 >= 1; c1--)
+                {
+                    naux.Cargar(x[f1, c1]);
+                    if (naux.VerifPri())
+                    {
+                        if (bandera)
+                        {
+                            r = r + " - √" + x[f1, c1];
+                        }
+                        else
+                        {
+                            r = r + " + √" + x[f1, c1];
+                        }
+                        bandera = !bandera;
+                    }
+                }
+            }
+            return r;
+        }
+        /*public double AcumPrim()
+        {
+            int cont = 1;
+            bool bandera = true;
+            double r = 0;
+            NEnt naux = new NEnt();
+            for (int f1 = f; f1 >= 1; f1--)
+            {
+                for (int c1 = c; c1 >= 1; c1--)
+                {
+                    naux.Cargar(x[f1, c1]);
+                    if (naux.VerifPri())
+                    {
+                        if (bandera)
+                        {
+                            r = r + Math.Sqrt(x[f1, c1]);
+                        }
+                        else
+                        {
+                            r = r - Math.Sqrt(x[f1, c1]);
+                        }
+                        if (cont != 1)
+                        {
+                            bandera = !bandera;
+                        }
+                        else
+                        {
+                            bandera = true;
+                            cont = 2;
+                        }
+                    }
+                }
+            }
+            return r;
+        }*/
+
+        // Ejercicio 2: Elementos que no se repiten-----------        
+        public int EleNoRep()
+        {
+            int ele, cont;
+            cont = 0;
+            for (int f1 = 1; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    ele = x[f1, c1];
+                    if (Frec(ele) == 1)
+                    {
+                        cont++;
+                    }
+                }
+            }
+            return cont;            
+        }        
+
+        // Ejercicio 3: Matriz x está en matriz y?---------------
+        public bool MIncluida(MATRICES y)
+        {
+            int f1;
+            f1 = 1;
+            bool bandera = true;
+            while ((f1 <= f) && (bandera == true))
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    int ele = x[f1, c1];
+                    if (y.SeEncuentra(ele) == false)
+                    {
+                        bandera = false;
+                        break;
+                    }
+                }
+                f1++;
+            }
+            return bandera;
+        }
+
+        // Ejercicio 4: Ordenar filas según cantidad de primos----------
+        public void OrdFPri()
+        {
+            for (int p = 1; p <= f - 1; p++)
+            {
+                for (int d = p + 1; d <= f; d++)
+                {
+                    if (CantPri(d) < CantPri(p))
+                    {
+                        InterFils(d, p);
+                    }
+                }
+            }
+        }
+
+        // Ejercicio 5: Ordenar por columnas por frecuencia;
+        public void CargarOrdColFrec(VECTORES v)
+        {
+            for (int c1 = c; c1 >= 1; c1--)
+            {
+                for (int f1 = 1; f1 <= f; f1++)
+                {
+                    v.Cargar(x[f1, c1]);
+                }
+            }
+        }
+        public void DescargarOrdColFrec(VECTORES v, VECTORES e, VECTORES frec)
+        {
+            int i = 0;
+            v.OrdEleMayFrec(e, frec);
+            for (int c1 = c; c1 >= 1; c1--)
+            {
+                for (int f1 = 1; f1 <= f; f1++)
+                {
+                    i++;
+                    x[f1, c1] = v.RetEle(i);
+                }
+            }
+        }
+
+        // Ejercicio 6: Intercalar fibo no fibo--------------------------------------
+        public void FiboNoFibo()
+        {
+            int ic;
+            bool bandera = true;
+            NEnt nd, np;
+            nd = new NEnt();
+            np = new NEnt();
+            for (int fp = f; fp >= 1; fp--)
+            {
+                for (int cp = 1; cp <= c; cp++)
+                {
+                    if (bandera)
+                    {
+                        for (int fd = fp; fd >= 1; fd--)
+                        {
+                            if (fd == fp)
+                            {
+                                ic = cp;
+                            }
+                            else
+                            {
+                                ic = 1;
+                            }
+                            for (int cd = ic; cd <= c; cd++)
+                            {
+                                nd.Cargar(x[fd, cd]); np.Cargar(x[fp, cp]);
+                                if (nd.VerifFibo() && !np.VerifFibo() ||
+                                    nd.VerifFibo() && np.VerifFibo() && x[fd, cd] < x[fp, cp] ||
+                                    !nd.VerifFibo() && !np.VerifFibo() && x[fd, cd] < x[fp, cp])
+                                {
+                                    Intercambio(fd, cd, fp, cp);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int fd = fp; fd >= 1; fd--)
+                        {
+                            if (fd == fp)
+                            {
+                                ic = cp;
+                            }
+                            else
+                            {
+                                ic = 1;
+                            }
+                            for (int cd = ic; cd <= c; cd++)
+                            {
+                                nd.Cargar(x[fd, cd]); np.Cargar(x[fp, cp]);
+                                if (!nd.VerifFibo() && np.VerifFibo() ||
+                                    !nd.VerifFibo() && !np.VerifFibo() && x[fd, cd] < x[fp, cp] ||
+                                    nd.VerifFibo() && np.VerifFibo() && x[fd, cd] < x[fp, cp])
+                                {
+                                    Intercambio(fd, cd, fp, cp);
+                                }
+                            }
+                        }
+                    }
+                    bandera = !bandera;
+                }
+            }
+        }
+
+        // Ejercicio 7: Ordenar triangular-------------------------------
+        public void CargarOrdTri(VECTORES v)
+        {
+            int c1 = 2;
+            int cont = 2;
+            for (int f1 = 1; f1 <= f - 1; f1++)
+            {
+                
+                while (c1 <= c)
+                {
+                    v.Cargar(x[f1, c1]);
+                    c1++;
+                }
+                cont++;
+                c1 = cont;
+            }
+        }
+        public void DescargarOrdTri(VECTORES v)
+        {
+            int c1 = 2;
+            int cont = 2;
+            int i = 0;
+            for (int f1 = 1; f1 <= f - 1; f1++)
+            {
+
+                while (c1 <= c)
+                {
+                    i++;
+                    x[f1, c1] = v.RetEle(i);
+                    c1++;
+                }
+                cont++;
+                c1 = cont;
+            }                                                  
+        }
+
+        // Ejercicio 8: Seg par impar triangular
+        public void CargarPara8(VECTORES v)
+        {
+            for (int f1 = f; f1 >= 1; f1--)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    v.Cargar(x[f1, c1]);
+                }
+            }
+        }
+        public void DescargarPara8(VECTORES v)
+        {
+            int i = 0;
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                for (int f1 = 1; f1 <= f; f1++)
+                {
+                    i++;
+                    x[f1, c1] = v.RetEle(i);
+                }
+            }
+        }
+        public void SegParImpTri()
+        {
+            int ic;
+            NEnt nd = new NEnt();
+            NEnt np = new NEnt();
+            for (int f1 = 2; f1 <= f; f1++)
+            {
+                for (int c1 = 1; c1 <= f1 - 1; c1++)
+                {
+                    for (int f2 = f1; f2 <= f; f2++)
+                    {
+                        if (f2 == f1)
+                        {
+                            ic = c1;
+                        }
+                        else
+                        {
+                            ic = 1;
+                        }
+                        for (int c2 = ic; c2 <= f2 - 1; c2++)
+                        {
+                            nd.Cargar(x[f2, c2]); np.Cargar(x[f1, c1]);
+                            if (nd.VerifPar() && !np.VerifPar() ||
+                                nd.VerifPar() && np.VerifPar() && x[f2, c2] < x[f1, c1] ||
+                                !nd.VerifPar() && !np.VerifPar() && x[f2, c2] < x[f1, c1])
+                            {
+                                Intercambio(f2, c2, f1, c1);
+                            }
+                        }
+                    }
+                }
+            }                       
+        }
+        public void Cargar2Para8(VECTORES v)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                for (int f1 = 1; f1 <= f; f1++)
+                {
+                    v.Cargar(x[f1, c1]);
+                }
+            }
+        }
+        public void Descargar2Para8(VECTORES v)
+        {
+            int i = 0;
+            for (int f1 = f; f1 >= 1; f1--)
+            {
+                for (int c1 = 1; c1 <= c; c1++)
+                {
+                    i++;
+                    x[f1, c1] = v.RetEle(i);
+                }
+            }
+        }
+
+        // Ejercicio 9: Ordenar diagonal secundaria--------------
+        public void CargarOrdDiagSec(VECTORES v)
+        {
+            int f1, c1;
+            f1 = f; c1 = 1;
+            while (f1 >= 1 && c1 <= c)
+            {
+                v.Cargar(x[f1, c1]);
+                f1--; c1++;
+            }
+        }
+        public void DescargarOrdDiagSec(VECTORES v)
+        {
+            int f1, c1, i;            
+            f1 = f; c1 = 1; i = 0;
+            while (f1 >= 1 && c1 <= c)
+            {
+                i++;
+                x[f1, c1] = v.RetEle(i);
+                f1--; c1++;
+            }
+        }
+        
+        // Ejercicio 10: Encontrar mayor diagonal-----------------------------
+        public void MayorDiag()
+        {
+            int f1, c1, idef, idec, i, filaum, ic;
+            f1 = f; c1 = 1; idef = 1; idec = c; i = 1; filaum = 1; ic = 1;
+            int mayor = 0;           
+            while (i <= f)
+            {
+                while ((f1 >= idef) && (c1 <= idec))
+                {                   
+                    if (x[f1, c1] > mayor)
+                    {
+                        mayor = x[f1, c1];
+                    }
+                    f1--; c1++;
+                }
+                x[filaum, c + 1] = mayor;
+                ic++;
+                f1 = f; c1 = ic;
+                idef++; i++; filaum++;
+                mayor = 0;
+            }
+            c++;
+        }
+
+        
+
+
+
+
+
+
+
+
+
+    }
+}

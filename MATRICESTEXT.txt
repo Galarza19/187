@@ -1,0 +1,161 @@
+class MATRICES
+{
+    const int MAXF = 50;
+    const int MAXC = 50;
+    private int[,] x;
+    private int f, c;
+
+    // CONSTRUCTOR--------------------------
+    public MATRICES()
+    {
+        f = 0; c = 0;
+        x = new int[MAXF, MAXC];
+    }
+
+    // CARGAR--------------------------------------------
+    public void Cargar(int nf, int nc, int a, int b)
+    {
+        Random r = new Random();
+        f = nf; c = nc;
+        for (int f1 = 1; f1 <= f; f1++)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                x[f1, c1] = r.Next(a, b + 1);
+            }
+        }
+    }
+
+    // DESCARGAR--------------------------------
+    public string Descargar()
+    {
+        string s = "";
+        for (int f1 = 1; f1 <= f; f1++)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                s = s + x[f1, c1] + "\x09";
+            }
+            s = s + "\x0d" + "\x0a";
+        }
+        return s;
+    }
+
+    // AUX-------------------------------------
+
+    // Fila y Columna
+    public int Fila()
+    {
+        return f;
+    }
+    public int Columna()
+    {
+        return c;
+    }
+    // Frec de elemento------------------------
+    public int Frec(int ele)
+    {
+        int frec = 0;
+        for (int f1 = 1; f1 <= f; f1++)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                if (ele == x[f1, c1])
+                {
+                    frec++;
+                }
+            }
+        }
+        return frec;
+    }
+    // Se encuentra?------------------
+    public bool SeEncuentra(int ele)
+    {
+        int f1;
+        f1 = 1;
+        bool bandera = false;
+        while ((f1 <= f) && (bandera == false))
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                if (ele == x[f1, c1])
+                {
+                    bandera = true;
+                    break;
+                }
+            }
+            f1++;
+        }
+        return bandera;
+    }
+    // Intercambio de filas
+    public void InterFils(int nf1, int nf2)
+    {
+        for (int c1 = 1; c1 <= c; c1++)
+        {
+            Intercambio(nf1, c1, nf2, c1);
+        }
+    }
+    // Cantidad de primos en fila
+    public int CantPri(int nf)
+    {
+        int primos = 0;
+        NEnt naux = new NEnt();
+        for (int c1 = 1; c1 <= c; c1++)
+        {
+            naux.Cargar(x[nf, c1]);
+            if (naux.VerifPri())
+            {
+                primos++;
+            }
+        }
+        return primos;
+    }
+    // Elemento de mayor frecuencia
+    public int PosEleMayFrecCol()
+    {
+        int ele, mayfrec, posc;
+        mayfrec = 0; posc = 0;
+        for (int f1 = 1; f1 <= f; f1++)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                ele = x[f1, c1];
+                if (Frec(ele) > mayfrec)
+                {
+                    mayfrec = Frec(ele);
+
+                }
+                posc++;
+            }
+        }
+        return posc;
+    }
+    public int PosEleMayFrecFil()
+    {
+        int ele, mayfrec, posf;
+        mayfrec = 0; posf = 0;
+        for (int f1 = 1; f1 <= f; f1++)
+        {
+            for (int c1 = 1; c1 <= c; c1++)
+            {
+                ele = x[f1, c1];
+                if (Frec(ele) > mayfrec)
+                {
+                    mayfrec = Frec(ele);
+
+                }
+            }
+            posf++;
+        }
+        return posf;
+    }
+    // INTERCAMBIO----------------------------------------------------
+    public void Intercambio(int fp1, int cp1, int fp2, int cp2)
+    {
+        int aux;
+        aux = x[fp1, cp1];
+        x[fp1, cp1] = x[fp2, cp2];
+        x[fp2, cp2] = aux;
+    }
+}        
